@@ -1,6 +1,15 @@
 #!/bin/bash
 HELP=\
-"No help"
+"
+This is a simple wrapper script to run gentle on port 8080 of the host machine. The docker image is pulled from lowerquality/gentle
+
+To run, use:
+    ./docker-gentle.sh -r
+
+-h  --help      print this help message
+-r  --run       run the container, if a container named gentle already exists then it will run that
+-d  --destroy   prunes all unused images and containers
+"
 
 if [ "$#" -eq 0 ]
 then
@@ -38,11 +47,12 @@ done
 if [ $DESTROY = true ]; then
     docker container stop $IMAGENAME
     docker container prune -f
+    docker image prune -f
     exit 0
 fi
 
-echo "Starting gentle at https://localhost:8080"
 if [ $RUN = true ]; then
+    echo "Starting gentle at https://localhost:8080"
     if docker ps -a | grep -q "$IMAGENAME"; then
         docker container start $IMAGENAME
     else

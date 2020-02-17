@@ -6,5 +6,6 @@ RUN apt-get update \
     unzip
 
 WORKDIR /aeneas
-COPY install-aeneas.sh /aeneas/install-aeneas.sh
+COPY install-aeneas.sh ./install-aeneas.sh
 RUN ./install-aeneas.sh
+WORKDIR /workdir

@@ -1,6 +1,20 @@
 #!/bin/bash
 HELP=\
-"No help"
+"
+This script helps with building the docker image and running the container interactively, you could alternativley use docker commands.
+
+To build and run, use:
+    ./docker-julius.sh -b
+    ./docker-julius.sh -r
+
+This will also create an aeneas folder in the current directory which is where the volume is on the host machine.
+
+-h  --help      print this help message
+-b  --build     build the docker image
+-r  --run       run the container, if a container named aeneas already exists then it will run that
+-v  --volume    can specify a volume to use for the docker image, by default it will be <current directory>/julius and will be mounted at /working-folder in the container (This can only be specified on the first run of the container)
+-d  --destroy   prunes all unused images and containers
+"
 
 if [ "$#" -eq 0 ]
 then

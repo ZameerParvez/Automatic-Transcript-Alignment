@@ -19,4 +19,4 @@ fi
 INFILE=$1
 OUTFILE=$2
 
-< "$INFILE" sed -r "s/^[^>]*>/\n/" > "$OUTFILE"
+< "$INFILE" sed -r "s/^[^>]*> /\n/" > "$OUTFILE"

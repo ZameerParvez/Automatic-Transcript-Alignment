@@ -23,15 +23,13 @@ class Aligner():
         if image_name in container_list:
             subprocess.run(["docker", "container", "start", image_name])
         else:
-            subprocess.run(["docker", "container", "run", "-d", "-p", "8080:8765", "--name", image_name, dockerfile])
+            # subprocess.run(["docker", "container", "run", "-dtv", "{}:/workdir".format(self.data_path), "-p", "8080:8765", "--name", image_name, dockerfile])
+            subprocess.run(["docker", "container", "run", "-dtv", "{}:/workdir".format(self.data_path), "--name", image_name, dockerfile])
 
     def stop_container(self):
         subprocess.run(["docker", "container", "stop", image_name])
 
-    # I dont think this will work
     def align(self, file_name):
+        subprocess.run(["docker", "container", "exec", image_name, "python", "/gentle/align.py", "--nthreads", "1", "-o", "/workdir/gentle/{}.json".format(file_name), "/workdir/{}.sph".format(file_name), "/workdir/{}.txt".format(file_name)])
         out_name = "{}/{}.json".format(self.alignment_out_path, file_name)
-        alignment_json = subprocess.run(["curl", "-F", "audio=@{}/{}.sph".format(self.data_path, file_name), "-F", "transcript=@{}/{}.txt".format(self.data_path, file_name), "http://localhost:8080/transcriptions?async=false"], encoding='utf-8', stdout=subprocess.PIPE).stdout
-        with open(out_name, "w") as out_file:
-            out_file.write(alignment_json)
         json_to_srt.json_to_srt(out_name)

@@ -28,7 +28,6 @@ python3 evaluator.py -d <path> -a <aligner>
 --help
 '''
 
-# should be relative path
 data_path = ""
 test_repetitions = 3
 aligner = ""
@@ -39,13 +38,6 @@ write_data_from_srt = False
 
 import datetime
 def main():
-    # t = "0:00:22,200000"
-    # format = "%H:%M:%S,%f"
-    # x = datetime.datetime.strptime(t, format).time()
-    # print(x)
-
-    # exit()
-
     parse_inputs(sys.argv[1:])
 
     if os.path.isdir(data_path):
@@ -60,6 +52,8 @@ def main():
                 message = "A valid aligner must be entered: {}".format(aligner)
                 raise Exception(message)
             prepare_data.write_srt_data("{}/{}".format(data_path, aligner))
+    else:
+        raise Exception("A valid data path must be entered")
 
 
 def parse_inputs(args):
@@ -122,37 +116,6 @@ def get_alignment_times(data_path, aligner_option):
             out_file.write("{},{},{}\n".format(entry["file"], entry["attempt"], entry["duration"]))
 
     aligner.stop_container()
-
-# measure time taken to align [measuring is done but nothing has been calculated from the data]
-    # measure multiple things and compute mean and variance to 
-        # align multiple times to account for sampling errors
-        # [important note, different samples are for approximating normal dist, samples of the same thing account for measuring errors]
-    # store all measurment somewhere
-    # store mean and variance for each file (normalised to ) [doesnt actually make sense]
-    # store mean and variance across all files
-# process
-    # get an instance of an aligner
-    # start container
-    # do alignment per file multiple times
-        # measure alignment time per alignment operation
-        # results will be stored
-    # stop container
-
-# measure difference between aligners srt times and tedlium reference times
-    # try to calculate the distribution of differences
-        # do difference per line
-            # store extra info per line, e.g. num of characters, start diff, end diff, duration diff
-        # this will give a good idea on how different the alignments are
-# process
-    # compare the srt caption times to those in the reference
-        # need to know where each is
-            # for each caption in each compute difference in start, end and duration
-                # store those and the num of chars in the caption into another file
-    # with this data other things can be computed which will be seperate funcitons
-        # e.g dists of start end and duration, correlation of length and accuracy
-    # accuracy will be a scoring that takes into account all three time measurements
-        # I dont know if duration is needed
-
 
 if __name__ == "__main__":
     main()
